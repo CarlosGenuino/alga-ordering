@@ -1,8 +1,8 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
+import com.algaworks.algashop.ordering.domain.exception.DomainException;
 import com.algaworks.algashop.ordering.domain.validator.FieldValidations;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -55,8 +55,12 @@ public class Customer {
         this.setLoyaltyPoints(loyaltyPoints);
     }
 
-    public void addLoayltyPoints(Integer points) {
-
+    public void addLoyaltyPoints(Integer points) {
+        verifyIfChangeable();
+        if (Objects.isNull(points) || points <= 0) {
+            throw new DomainException("Loyalty points can't be negative or null");
+        }
+        this.loyaltyPoints += points;
     }
 
     public void archive() {
