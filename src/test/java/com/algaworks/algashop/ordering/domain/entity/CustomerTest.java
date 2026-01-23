@@ -1,6 +1,7 @@
 package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
+import com.algaworks.algashop.ordering.domain.exception.DomainException;
 import com.algaworks.algashop.ordering.domain.utility.IdGenerator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomerTest {
@@ -101,10 +101,48 @@ class CustomerTest {
                 .isThrownBy(()-> customer.changePhone("123-123-1111"));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(()-> customer.enablePromotionNotifications());
+                .isThrownBy(customer::enablePromotionNotifications);
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
-                .isThrownBy(()-> customer.disablePromotionNotifications());
+                .isThrownBy(customer::disablePromotionNotifications);
     }
 
+    @Test
+    void given_brandNewCustomer_whenAddLoyaltyPoints_shouldSumPoints() {
+        Customer customer = new Customer(
+                IdGenerator.generateTimeBasedUUID(),
+                "John Doe",
+                LocalDate.of(1991, 7, 5),
+                "john.doe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                false,
+                OffsetDateTime.now()
+        );
+
+        customer.addLoyaltyPoints(10);
+        customer.addLoyaltyPoints(20);
+
+        Assertions.assertThat(customer.loyaltyPoints()).isEqualTo(30);
+    }
+
+    @Test
+    void given_brandNewCustomer_whenAddInvalidLoyaltyPoints_shouldGenerateException() {
+        Customer customer = new Customer(
+                IdGenerator.generateTimeBasedUUID(),
+                "John Doe",
+                LocalDate.of(1991, 7, 5),
+                "john.doe@gmail.com",
+                "478-256-2504",
+                "255-08-0578",
+                false,
+                OffsetDateTime.now()
+        );
+
+        Assertions.assertThatExceptionOfType(DomainException.class)
+                .isThrownBy(()-> customer.addLoyaltyPoints(0));
+
+        Assertions.assertThatExceptionOfType(DomainException.class)
+                .isThrownBy(()-> customer.addLoyaltyPoints(-10));
+    }
 }
