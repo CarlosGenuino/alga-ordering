@@ -11,6 +11,7 @@ public record CustomerId(
     public CustomerId() {
         this(IdGenerator.generateTimeBasedUUID());
     }
+
     public CustomerId(UUID value) {
         Objects.requireNonNull(value);
         this.value = value;
