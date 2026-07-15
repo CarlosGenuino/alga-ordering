@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -145,5 +146,39 @@ class CustomerTest {
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(()-> customer.addLoyaltyPoints(new LoyaltyPoints(-10)));
+    }
+
+    @Test
+    void given_nullBirthDate_whenTryCreateCustomer_shouldGenerateException() {
+        Assertions.assertThatExceptionOfType(NullPointerException.class)
+                .isThrownBy(()-> {
+                    new Customer(
+                            new CustomerId(),
+                            new FullName("Jonh", "Doe"),
+                            new BirthDate(null),
+                            new Email("dev@gmail.com"),
+                            new Phone("478-256-2504"),
+                            new Document("255-08-0578"),
+                            false,
+                            OffsetDateTime.now()
+                    );
+                });
+    }
+
+    @Test
+    void given_a_future_BirthDate_whenTryCreateCustomer_shouldGenerateException() {
+        Assertions.assertThatExceptionOfType(DomainException.class)
+                .isThrownBy(()-> {
+                    new Customer(
+                            new CustomerId(),
+                            new FullName("Jonh", "Doe"),
+                            new BirthDate(LocalDate.now().plusYears(1)),
+                            new Email("dev@gmail.com"),
+                            new Phone("478-256-2504"),
+                            new Document("255-08-0578"),
+                            false,
+                            OffsetDateTime.now()
+                    );
+                });
     }
 }

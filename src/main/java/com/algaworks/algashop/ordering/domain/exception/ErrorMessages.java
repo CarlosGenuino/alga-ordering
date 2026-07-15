@@ -10,4 +10,5 @@ public class ErrorMessages {
     public static final String ERROR_CUSTOMER_ARCHIVED = "Customer is archived it cannot be changed";
     public static final String VALIDATION_ERROR_PHONE_IS_NULL = "Phone cannot be null";
     public static final String VALIDATION_ERROR_PHONE_IS_BLANK = "Phone cannot be blank";
+    public static final String VALIDATION_ERROR_ZIP_CODE_INVALID = "Zip code is invalid";
 }

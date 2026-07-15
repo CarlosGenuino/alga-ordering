@@ -24,6 +24,7 @@ public class Customer {
     private OffsetDateTime registeredAt;
     private OffsetDateTime archivedAt;
     private LoyaltyPoints loyaltyPoints;
+    private Address address;
 
     public Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email,
                     Phone phone, Document document, Boolean promotionNotificationsAllowed,
@@ -101,6 +102,11 @@ public class Customer {
         this.setPhone(phone);
     }
 
+    public void changeAddress(Address address){
+        verifyIfChangeable();
+        this.setAddress(address);
+    }
+
     public CustomerId id() {
         return id;
     }
@@ -165,6 +171,10 @@ public class Customer {
 
     private void setPhone(Phone phone) {
         this.phone = phone;
+    }
+
+    private void setAddress(Address address) {
+        this.address = address;
     }
 
     private void setDocument(Document document) {
