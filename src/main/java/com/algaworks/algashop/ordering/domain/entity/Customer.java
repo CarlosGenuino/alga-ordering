@@ -2,6 +2,7 @@ package com.algaworks.algashop.ordering.domain.entity;
 
 import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedException;
 import com.algaworks.algashop.ordering.domain.exception.DomainException;
+import com.algaworks.algashop.ordering.domain.utility.IdGenerator;
 import com.algaworks.algashop.ordering.domain.validator.FieldValidations;
 import com.algaworks.algashop.ordering.domain.valueobject.*;
 
@@ -26,27 +27,29 @@ public class Customer {
     private LoyaltyPoints loyaltyPoints;
     private Address address;
 
-    public Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email,
-                    Phone phone, Document document, Boolean promotionNotificationsAllowed,
-                    OffsetDateTime registeredAt, Address address) {
-        this.setId(id);
-        this.setFullName(fullName);
-        this.setBirthDate(birthDate);
-        this.setEmail(email);
-        this.setPhone(phone);
-        this.setDocument(document);
-        this.setPromotionNotificationsAllowed(promotionNotificationsAllowed);
-        this.setRegisteredAt(registeredAt);
-        this.setArchived(false);
-        this.setLoyaltyPoints(LoyaltyPoints.ZERO);
-        this.setAddress(address);
+    public static Customer brandNew(FullName fullName, BirthDate birthDate, Email email,
+                                    Phone phone, Document document, Boolean promotionNotificationsAllowed,
+                                    Address address){
+        return new Customer(
+                new CustomerId(),
+                fullName,
+                birthDate,
+                email,
+                phone,
+                document,
+                promotionNotificationsAllowed,
+                false,
+                OffsetDateTime.now(),
+                null,
+                LoyaltyPoints.ZERO,
+                address);
     }
 
-    public Customer(CustomerId id, String fullName, BirthDate birthDate, Email email, Phone phone,
-                    Document document, Boolean promotionNotificationsAllowed, Boolean archived,
-                    OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints) {
+    private Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email, Phone phone,
+                     Document document, Boolean promotionNotificationsAllowed, Boolean archived,
+                     OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address) {
         this.setId(id);
-        this.setFullName(new FullName(fullName, "."));
+        this.setFullName(fullName);
         this.setBirthDate(birthDate);
         this.setEmail(email);
         this.setPhone(phone);
@@ -56,6 +59,23 @@ public class Customer {
         this.setRegisteredAt(registeredAt);
         this.setArchivedAt(archivedAt);
         this.setLoyaltyPoints(loyaltyPoints);
+        this.setAddress(address);
+    }
+
+    public static Customer existing(CustomerId id, FullName fullName, BirthDate birthDate, Email email, Phone phone,
+                                    Document document, Boolean promotionNotificationsAllowed, Boolean archived,
+                                    OffsetDateTime registeredAt, OffsetDateTime archivedAt, LoyaltyPoints loyaltyPoints, Address address){
+        return new Customer(id,
+                fullName,
+                birthDate,
+                email, phone,
+                document,
+                promotionNotificationsAllowed,
+                archived,
+                registeredAt,
+                archivedAt,
+                loyaltyPoints,
+                address);
     }
 
     public void addLoyaltyPoints(LoyaltyPoints points) {

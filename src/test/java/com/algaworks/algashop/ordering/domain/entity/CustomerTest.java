@@ -19,15 +19,13 @@ class CustomerTest {
     void given_invalidEmail_whenTryCreateCustomer_shouldGenerateException() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(()-> {
-                    new Customer(
-                            new CustomerId(),
+                    Customer.brandNew(
                             new FullName("Jonh", "Doe"),
                             new BirthDate(LocalDate.of(1991, 7, 5)),
                             new Email("invalid"),
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now(),
                             Address.builder()
                                     .street("Bourbon Street")
                                     .number("1437")
@@ -43,15 +41,13 @@ class CustomerTest {
 
     @Test
     void given_invalidEmail_whenTryUpdatedCustomerEmail_shouldGenerateException() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("Jonh", "Doe"),
                 new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1437")
@@ -71,15 +67,13 @@ class CustomerTest {
 
     @Test
     void given_unarchivedCustomer_whenArchive_shouldAnonymize() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("Jonh", "Doe"),
                 new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1437")
@@ -108,19 +102,25 @@ class CustomerTest {
 
     @Test
     void given_archivedCustomer_whenTryToUpdate_shouldGenerateException() {
-        Customer customer = new Customer(
-                new CustomerId(),
-                "Anonymous",
-                null,
-                new Email("anonymous@anonymous.com"),
-                new Phone("000-000-0000"),
-                new Document("000-00-0000"),
+        Customer customer = Customer.brandNew(
+                new FullName("Jonh", "Doe"),
+                new BirthDate(LocalDate.of(1991, 7, 5)),
+                new Email("john.doe@gmail.com"),
+                new Phone("478-256-2504"),
+                new Document("255-08-0578"),
                 false,
-                true,
-                OffsetDateTime.now(),
-                OffsetDateTime.now(),
-                new LoyaltyPoints(10)
+                Address.builder()
+                        .street("Bourbon Street")
+                        .number("1437")
+                        .neighborhood("Noth Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode(new ZipCode("21350"))
+                        .complement("Apt 1103")
+                        .build()
         );
+
+        customer.archive();
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(customer::archive);
@@ -132,6 +132,17 @@ class CustomerTest {
                 .isThrownBy(()-> customer.changePhone(new Phone("123-123-1111")));
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
+                .isThrownBy(()-> customer.changeAddress(Address.builder()
+                        .street("Bourbon Street")
+                        .number("1437")
+                        .neighborhood("Noth Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode(new ZipCode("21350"))
+                        .complement("Apt 1103")
+                        .build()));
+
+        Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
                 .isThrownBy(customer::enablePromotionNotifications);
 
         Assertions.assertThatExceptionOfType(CustomerArchivedException.class)
@@ -140,15 +151,13 @@ class CustomerTest {
 
     @Test
     void given_brandNewCustomer_whenAddLoyaltyPoints_shouldSumPoints() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("Jonh", "Doe"),
                 new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1437")
@@ -168,15 +177,13 @@ class CustomerTest {
 
     @Test
     void given_brandNewCustomer_whenAddInvalidLoyaltyPoints_shouldGenerateException() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("Jonh", "Doe"),
                 new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1437")
@@ -199,15 +206,13 @@ class CustomerTest {
     void given_nullBirthDate_whenTryCreateCustomer_shouldGenerateException() {
         Assertions.assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(()-> {
-                    new Customer(
-                            new CustomerId(),
+                    Customer.brandNew(
                             new FullName("Jonh", "Doe"),
                             new BirthDate(null),
                             new Email("dev@gmail.com"),
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now(),
                             Address.builder()
                                     .street("Bourbon Street")
                                     .number("1437")
@@ -225,15 +230,13 @@ class CustomerTest {
     void given_a_future_BirthDate_whenTryCreateCustomer_shouldGenerateException() {
         Assertions.assertThatExceptionOfType(DomainException.class)
                 .isThrownBy(()-> {
-                    new Customer(
-                            new CustomerId(),
+                    Customer.brandNew(
                             new FullName("Jonh", "Doe"),
                             new BirthDate(LocalDate.now().plusYears(1)),
                             new Email("dev@gmail.com"),
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now(),
                             Address.builder()
                                     .street("Bourbon Street")
                                     .number("1437")
