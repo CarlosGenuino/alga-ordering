@@ -28,7 +28,7 @@ public class Customer {
 
     public Customer(CustomerId id, FullName fullName, BirthDate birthDate, Email email,
                     Phone phone, Document document, Boolean promotionNotificationsAllowed,
-                    OffsetDateTime registeredAt) {
+                    OffsetDateTime registeredAt, Address address) {
         this.setId(id);
         this.setFullName(fullName);
         this.setBirthDate(birthDate);
@@ -39,6 +39,7 @@ public class Customer {
         this.setRegisteredAt(registeredAt);
         this.setArchived(false);
         this.setLoyaltyPoints(LoyaltyPoints.ZERO);
+        this.setAddress(address);
     }
 
     public Customer(CustomerId id, String fullName, BirthDate birthDate, Email email, Phone phone,
@@ -75,6 +76,12 @@ public class Customer {
         this.setEmail(new Email(UUID.randomUUID() + "@anonymous.com"));
         this.setBirthDate(null);
         this.setPromotionNotificationsAllowed(false);
+        this.setAddress(
+                this.address.toBuilder()
+                .number("Anonymized")
+                .complement(null)
+                .build()
+        );
     }
 
     public void enablePromotionNotifications() {
@@ -151,6 +158,8 @@ public class Customer {
         return loyaltyPoints;
     }
 
+    public Address address() { return address; }
+
     private void setId(CustomerId id) {
         Objects.requireNonNull(id);
         this.id = id;
@@ -174,6 +183,7 @@ public class Customer {
     }
 
     private void setAddress(Address address) {
+        Objects.requireNonNull(address);
         this.address = address;
     }
 

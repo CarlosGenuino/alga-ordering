@@ -1,7 +1,10 @@
 package com.algaworks.algashop.ordering.domain.valueobject;
 
-import java.util.Objects;
+import com.algaworks.algashop.ordering.domain.validator.FieldValidations;
+import lombok.Builder;
 
+
+@Builder(toBuilder = true)
 public record Address(
         String street,
         String number,
@@ -12,11 +15,11 @@ public record Address(
         ZipCode zipCode) {
 
     public Address(String street, String number, String complement, String neighborhood, String city, String state, ZipCode zipCode) {
-        Objects.requireNonNull(street);
-        Objects.requireNonNull(number);
-        Objects.requireNonNull(neighborhood);
-        Objects.requireNonNull(city);
-        Objects.requireNonNull(state);
+        FieldValidations.requiresNonBlank(street);
+        FieldValidations.requiresNonBlank(number);
+        FieldValidations.requiresNonBlank(neighborhood);
+        FieldValidations.requiresNonBlank(city);
+        FieldValidations.requiresNonBlank(state);
 
         this.street = street;
         this.number = number;

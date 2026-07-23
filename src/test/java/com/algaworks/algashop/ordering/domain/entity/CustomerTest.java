@@ -27,7 +27,16 @@ class CustomerTest {
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now()
+                            OffsetDateTime.now(),
+                            Address.builder()
+                                    .street("Bourbon Street")
+                                    .number("1437")
+                                    .neighborhood("Noth Ville")
+                                    .city("York")
+                                    .state("South California")
+                                    .zipCode(new ZipCode("21350"))
+                                    .complement("Apt 1103")
+                                    .build()
                     );
                 });
     }
@@ -42,7 +51,16 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                Address.builder()
+                        .street("Bourbon Street")
+                        .number("1437")
+                        .neighborhood("Noth Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode(new ZipCode("21350"))
+                        .complement("Apt 1103")
+                        .build()
         );
 
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
@@ -61,7 +79,16 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                Address.builder()
+                        .street("Bourbon Street")
+                        .number("1437")
+                        .neighborhood("Noth Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode(new ZipCode("21350"))
+                        .complement("Apt 1103")
+                        .build()
         );
 
         customer.archive();
@@ -72,7 +99,9 @@ class CustomerTest {
                 c -> assertThat(c.phone().value()).isEqualTo("000-000-0000"),
                 c -> assertThat(c.document().value()).isEqualTo("000-00-0000"),
                 c -> assertThat(c.birthDate()).isNull(),
-                c -> assertThat(c.isPromotionNotificationsAllowed()).isFalse()
+                c -> assertThat(c.isPromotionNotificationsAllowed()).isFalse(),
+                c -> assertThat(c.address().number()).isEqualTo("Anonymized"),
+                c -> assertThat(c.address().complement()).isNull()
         );
 
     }
@@ -119,7 +148,16 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                Address.builder()
+                        .street("Bourbon Street")
+                        .number("1437")
+                        .neighborhood("Noth Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode(new ZipCode("21350"))
+                        .complement("Apt 1103")
+                        .build()
         );
 
         customer.addLoyaltyPoints(new LoyaltyPoints(10));
@@ -138,7 +176,16 @@ class CustomerTest {
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now()
+                OffsetDateTime.now(),
+                Address.builder()
+                        .street("Bourbon Street")
+                        .number("1437")
+                        .neighborhood("Noth Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode(new ZipCode("21350"))
+                        .complement("Apt 1103")
+                        .build()
         );
 
         Assertions.assertThatExceptionOfType(DomainException.class)
@@ -160,7 +207,16 @@ class CustomerTest {
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now()
+                            OffsetDateTime.now(),
+                            Address.builder()
+                                    .street("Bourbon Street")
+                                    .number("1437")
+                                    .neighborhood("Noth Ville")
+                                    .city("York")
+                                    .state("South California")
+                                    .zipCode(new ZipCode("21350"))
+                                    .complement("Apt 1103")
+                                    .build()
                     );
                 });
     }
@@ -177,7 +233,16 @@ class CustomerTest {
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now()
+                            OffsetDateTime.now(),
+                            Address.builder()
+                                    .street("Bourbon Street")
+                                    .number("1437")
+                                    .neighborhood("Noth Ville")
+                                    .city("York")
+                                    .state("South California")
+                                    .zipCode(new ZipCode("21350"))
+                                    .complement("Apt 1103")
+                                    .build()
                     );
                 });
     }
