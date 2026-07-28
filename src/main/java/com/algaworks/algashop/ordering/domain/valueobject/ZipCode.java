@@ -14,4 +14,9 @@ public record ZipCode(String value) {
             throw new IllegalArgumentException();
         }
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }
