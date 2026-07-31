@@ -4,6 +4,7 @@ import com.algaworks.algashop.ordering.domain.exception.CustomerArchivedExceptio
 
 import com.algaworks.algashop.ordering.domain.exception.DomainException;
 import com.algaworks.algashop.ordering.domain.valueobject.*;
+import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;
