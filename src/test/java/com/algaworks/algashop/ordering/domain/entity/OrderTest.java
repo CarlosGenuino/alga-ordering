@@ -7,6 +7,7 @@ import com.algaworks.algashop.ordering.domain.valueobject.id.CustomerId;
 import com.algaworks.algashop.ordering.domain.valueobject.id.ProductId;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Or;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -40,7 +41,7 @@ class OrderTest {
                 (i) -> Assertions.assertThat(i.productId()).isEqualTo(productId),
                 (i) -> Assertions.assertThat(i.price()).isEqualTo(new Money("100")),
                 (i) -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(1))
-        );
+            );
     }
 
     @Test
@@ -86,15 +87,22 @@ class OrderTest {
 
     @Test
     public void givenDraftOrder_whenPlace_shouldChangeToPlaced() {
-        Order order = Order.draft(new CustomerId());
+        Order order = OrderTestDataBuilder.anOrder().build();
         order.place();
         Assertions.assertThat(order.isPlaced()).isTrue();
     }
 
     @Test
+    public void givenPlacedOrder_whenMarkAsPaid_shouldChangeToPaid() {
+        Order order = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).build();
+        order.markAsPaid();
+        Assertions.assertThat(order.isPaid()).isTrue();
+        Assertions.assertThat(order.paidAt()).isNotNull();
+    }
+
+    @Test
     public void givenPlacedOrder_whenTryToPlace_shouldGenerateException() {
-        Order order = Order.draft(new CustomerId());
-        order.place();
+        Order order = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).build();
         Assertions.assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
                 .isThrownBy(order::place);
     }
@@ -165,7 +173,7 @@ class OrderTest {
                 o -> Assertions.assertThat(o.shipping()).isEqualTo(shippingInfo),
                 o -> Assertions.assertThat(o.shippingCost()).isEqualTo(shippingCost),
                 o -> Assertions.assertThat(o.expectedDeliveryDate()).isEqualTo(expectedDeliveryDate)
-        );
+                );
 
     }
 
@@ -197,5 +205,5 @@ class OrderTest {
     }
 
 
-
+  
 }
